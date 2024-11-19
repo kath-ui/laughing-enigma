@@ -12,12 +12,22 @@ namespace Planner_Indicator
 {
     public partial class Form1 : Form
     {
-        private int currentMonth=1, currentYear=2024;
+        DateTime currentDate = DateTime.Now;
+        int currentMonth;
+        int currentYear;
+
+        
         private List<DateTime> daysInMonth = new List<DateTime>();
         public Form1()
         {
+             currentMonth = currentDate.Month;
+            currentYear = currentDate.Year;
             InitializeComponent();
-            InitializeCalendar();  
+            InitializeCalendar();
+
+            
+            label1.Text = currentDate.ToString("MMMM");
+            label2.Text = currentDate.ToString("yyyy");
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -36,43 +46,32 @@ namespace Planner_Indicator
         }
         private void InitializeCalendar()
         {
-            // Get the current date and the first day of the current month
-            DateTime currentDate = DateTime.Now;
-            int currentMonth = currentDate.Month;
-            int currentYear = currentDate.Year;
-
             DateTime firstDayOfMonth = new DateTime(currentYear, currentMonth, 1);
-
-            // Calculate the number of days in the current month
+            
             int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
-
-            // Clear existing controls from the TableLayoutPanel
+ 
             tableLayoutPanel1.Controls.Clear();
-            tableLayoutPanel1.RowCount = 0;  // Reset row count to start fresh
-
-            // Set up the TableLayoutPanel
-            tableLayoutPanel1.ColumnCount = 7;  // 7 columns for the days of the week
-            tableLayoutPanel1.RowCount = (int)Math.Ceiling((double)daysInMonth / 7.0) + 1; // Header row + rows for days
-            tableLayoutPanel1.AutoSize = true; // Allow table to auto-size
-
-            // Set the panel to fill the parent container (form or panel)
+            tableLayoutPanel1.RowCount = 0;     
+            tableLayoutPanel1.ColumnCount = 7;  
+            tableLayoutPanel1.RowCount = (int)Math.Ceiling((double)daysInMonth / 7.0) + 1; 
+            tableLayoutPanel1.AutoSize = true;      
             tableLayoutPanel1.Dock = DockStyle.Fill;
 
-            // Set equal width for all columns (7 columns)
+            
             tableLayoutPanel1.ColumnStyles.Clear();
             for (int i = 0; i < 7; i++)
             {
-                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 7));  // Equal width for all columns
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 7));  
             }
 
-            // Adjust row sizes to ensure cells are large enough
+            
             tableLayoutPanel1.RowStyles.Clear();
             for (int i = 0; i < tableLayoutPanel1.RowCount; i++)
             {
-                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60)); // Set a fixed height for each row (60px)
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60)); 
             }
 
-            // Add day names (headers) to the first row with a larger font
+            
             string[] dayNames = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
             for (int i = 0; i < 7; i++)
             {
@@ -103,9 +102,9 @@ namespace Planner_Indicator
                 Panel dayPanel = new Panel
                 {
                     
-                    BorderStyle = BorderStyle.FixedSingle,  // Black border for each day panel
-                    Margin = new Padding(0),  // No margin for a tight fit
-                    Padding = new Padding(5)  // Padding inside the panel for the day label
+                    BorderStyle = BorderStyle.FixedSingle,  
+                    Margin = new Padding(0), 
+                    Padding = new Padding(5)  
                 };
 
                 Label dayLabel = new Label
@@ -113,30 +112,91 @@ namespace Planner_Indicator
                     Text = day.ToString(),
                     TextAlign = ContentAlignment.MiddleCenter,
                     Dock = DockStyle.Fill,
-                    Font = new Font("Arial", 14)  //  font of day numbers
+                    Font = new Font("Arial", 14)  
                 };
                 dayPanel.Controls.Add(dayLabel);
 
-                // Highlight the current day
+                
                 if (day == currentDate.Day)
                 {
-                    dayPanel.BackColor = Color.LightGreen;  // Highlight current day
+                    dayPanel.BackColor = Color.LightGreen;  
                 }
 
-                // Add the panel to the tableLayoutPanel, placing it in the correct position
-                int row = (int)((firstDayOfWeek + day - 1) / 7) + 1; // Calculate the row number
-                int col = (firstDayOfWeek + day - 1) % 7; // Calculate the column number
+                
+                dayPanel.Click += (sender, e) =>
+                {
+                    
+                    Panel clickedPanel = (Panel)sender;  
+                    Label clickedLabel = clickedPanel.Controls[0] as Label;  
+                    HighlightClickedDay(clickedPanel, clickedLabel);
+
+                };
+
+
+                int row = (int)((firstDayOfWeek + day - 1) / 7) + 1; 
+                int col = (firstDayOfWeek + day - 1) % 7; 
                 tableLayoutPanel1.Controls.Add(dayPanel, col, row);
             }
         }
+        
+        private void HighlightClickedDay(Panel clickedPanel, Label clickedLabel)
+        {
+            
+            foreach (Control control in tableLayoutPanel1.Controls)
+            {
+                if (control is Panel)
+                {
+                    control.BackColor = Color.White;
+                }
+            }
 
+            
+            clickedPanel.BackColor = Color.LightGreen;  
+            clickedLabel.ForeColor = Color.Black;  
+        }
+        private void InitializeTextBoxForInput()
+        {
+            
+            textBox1.Visible = false;  
+            buttonSave.Visible = false; 
+        }
+        private void OnDayPanelClick(object sender, EventArgs e)
+        {
+           
+            Panel clickedPanel = (Panel)sender;
+            Label clickedLabel = clickedPanel.Controls[0] as Label;  
+            
+            labelSelectedDate.Text = $"Selected Date: {clickedLabel.Text}"; 
 
+            
+            textBox1.Visible = true;  
+            textBox1.Focus();        
+            buttonSave.Visible = true; 
+            buttonSave.Tag = clickedLabel.Text;
+        }
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            
+            string inputTask = textBox1.Text;
 
+            
+            MessageBox.Show($"Task for {buttonSave.Tag}: {inputTask}");
 
+            
+            textBox1.Text = "";  
+            textBox1.Visible = false; 
+            buttonSave.Visible = false; 
+            labelSelectedDate.Text = ""; 
+        }
+        private void label2_Click(object sender, EventArgs e)
+        {
+           
+        }
 
-
-
-
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+           
+        }
 
         public static List<DateTime> GetDaysInMonth(int month, int year)
         {
@@ -149,6 +209,11 @@ namespace Planner_Indicator
             }
 
             return days;
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
