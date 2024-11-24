@@ -118,20 +118,6 @@ namespace Planner_Indicator
                 dayPanel.Controls.Add(dayLabel);
 
                 
-                if (day == currentDate.Day)
-                {
-                    dayPanel.BackColor = Color.LightGreen;  
-                }
-
-                
-                dayPanel.Click += (sender, e) =>
-                {
-                    
-                    Panel clickedPanel = (Panel)sender;  
-                    Label clickedLabel = clickedPanel.Controls[0] as Label;  
-                    HighlightClickedDay(clickedPanel, clickedLabel);
-
-                };
 
                 var eventList = new string[]
                 {
@@ -145,21 +131,7 @@ namespace Planner_Indicator
             }
         }
         
-        private void HighlightClickedDay(Panel clickedPanel, Label clickedLabel)
-        {
-            
-            foreach (Control control in tableLayoutPanel1.Controls)
-            {
-                if (control is Panel)
-                {
-                    control.BackColor = Color.White;
-                }
-            }
-
-            
-            clickedPanel.BackColor = Color.LightGreen;  
-            clickedLabel.ForeColor = Color.Black;  
-        }
+        
        
         
         private void label2_Click(object sender, EventArgs e)
@@ -186,6 +158,11 @@ namespace Planner_Indicator
         }
 
         private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint_1(object sender, PaintEventArgs e)
         {
 
         }
