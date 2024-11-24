@@ -135,8 +135,7 @@ namespace Planner_Indicator
 
                 var eventList = new string[]
                 {
-                    " ",
-                    " "
+
                 };
                 var calendarItem = new CalendarItem(day, eventList.ToList());
 

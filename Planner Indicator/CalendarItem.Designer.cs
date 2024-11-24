@@ -46,12 +46,13 @@
             // 
             // eventsList
             // 
-            this.eventsList.Location = new System.Drawing.Point(3, 39);
+            this.eventsList.Location = new System.Drawing.Point(0, 38);
             this.eventsList.Multiline = true;
             this.eventsList.Name = "eventsList";
-            this.eventsList.Size = new System.Drawing.Size(152, 142);
+            this.eventsList.Size = new System.Drawing.Size(187, 142);
             this.eventsList.TabIndex = 1;
             this.eventsList.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.eventsList.TextChanged += new System.EventHandler(this.eventsList_TextChanged);
             // 
             // contextMenuStrip1
             // 

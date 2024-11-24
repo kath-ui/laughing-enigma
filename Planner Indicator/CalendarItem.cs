@@ -33,6 +33,7 @@ namespace Planner_Indicator
             foreach(var ev in Events)
             {
                 eventsList.Text += ev + "\n";
+                
             }
         }
 
@@ -42,6 +43,11 @@ namespace Planner_Indicator
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void eventsList_TextChanged(object sender, EventArgs e)
         {
 
         }
