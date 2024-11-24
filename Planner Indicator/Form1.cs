@@ -84,6 +84,7 @@ namespace Planner_Indicator
                     
                     BorderStyle = BorderStyle.FixedSingle 
                 };
+
                 tableLayoutPanel1.Controls.Add(label, i, 0);  
             }
 
@@ -132,10 +133,16 @@ namespace Planner_Indicator
 
                 };
 
+                var eventList = new string[]
+                {
+                    " ",
+                    " "
+                };
+                var calendarItem = new CalendarItem(day, eventList.ToList());
 
                 int row = (int)((firstDayOfWeek + day - 1) / 7) + 1; 
                 int col = (firstDayOfWeek + day - 1) % 7; 
-                tableLayoutPanel1.Controls.Add(dayPanel, col, row);
+                tableLayoutPanel1.Controls.Add(calendarItem, col, row);
             }
         }
         
@@ -154,40 +161,8 @@ namespace Planner_Indicator
             clickedPanel.BackColor = Color.LightGreen;  
             clickedLabel.ForeColor = Color.Black;  
         }
-        private void InitializeTextBoxForInput()
-        {
-            
-            textBox1.Visible = false;  
-            buttonSave.Visible = false; 
-        }
-        private void OnDayPanelClick(object sender, EventArgs e)
-        {
-           
-            Panel clickedPanel = (Panel)sender;
-            Label clickedLabel = clickedPanel.Controls[0] as Label;  
-            
-            labelSelectedDate.Text = $"Selected Date: {clickedLabel.Text}"; 
-
-            
-            textBox1.Visible = true;  
-            textBox1.Focus();        
-            buttonSave.Visible = true; 
-            buttonSave.Tag = clickedLabel.Text;
-        }
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            
-            string inputTask = textBox1.Text;
-
-            
-            MessageBox.Show($"Task for {buttonSave.Tag}: {inputTask}");
-
-            
-            textBox1.Text = "";  
-            textBox1.Visible = false; 
-            buttonSave.Visible = false; 
-            labelSelectedDate.Text = ""; 
-        }
+       
+        
         private void label2_Click(object sender, EventArgs e)
         {
            
